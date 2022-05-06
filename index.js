@@ -14,7 +14,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@molinar
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 app.get("/", (req, res) => {
-    console.log("HeY Molinard Please Response")
+    res.send("HeY Molinard Please Response")
 })
 
 async function run() {
