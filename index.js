@@ -13,9 +13,6 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@molinardcluster.ixezn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-app.get("/", (req, res) => {
-    res.send("HeY Molinard Please Response")
-})
 
 async function run() {
     try {
@@ -38,7 +35,7 @@ async function run() {
             const newItem = req.body;
             const result = await inventory.insertOne(newItem);
             res.send(result);
-        })
+        });
         app.put('/inventory/:itemId', async(req, res) => {
             const id = req.params.itemId;
             const updatedItem = req.body;
@@ -67,6 +64,9 @@ async function run() {
 
 run().catch(console.dir);
 
+app.get("/", (req, res) => {
+    res.send("HeY Molinard Please Response")
+});
 
 app.listen(port, () => {
     console.log('Molinard is Booming');
