@@ -22,7 +22,8 @@ async function run() {
         await client.connect();
         const inventory = client.db('molinardInventory').collection('inventoryIteams');
         app.get('/inventory', async (req, res) => {
-            const query = {};
+            const email = req.query.email;
+            const query = {email};
             const cursor = inventory.find(query);
             const inventoryItems = await cursor.toArray();
             res.send(inventoryItems);
