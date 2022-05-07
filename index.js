@@ -66,9 +66,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-    res.send("HeY Molinard Please Res");
+    res.send("HeY Molinard Please Response");
 });
 
 app.listen(port, () => {
-    console.log('Molinard is Boom');
+    console.log('Molinard is Booming');
 });
