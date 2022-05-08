@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
 
  const options = {
     hostname: 'whatever.com',
-    port: 443,
+    port: port,
     path: '/todos',
     method: 'GET'
   }
