@@ -20,30 +20,17 @@ async function run() {
         const inventory = client.db('molinardInventory').collection('inventoryIteams');
         const myItems = client.db('molinardInventory').collection('myItems')
 
+        app.post('/inventory', async(req, res) => {
+            const items = req.body;
+            const result = await inventory.insertOne(items);
+            res.send(result);
+        });
+
         app.get('/inventory/:itemId', async (req, res) => {
             const id = req.params.itemId;
             const query = { _id: ObjectId(id) };
             const item = await inventory.findOne(query);
             res.send(item);
-        });
-        app.post('/inventory', async(req, res) => {
-            const items = req.body;
-            const result = await inventory.insertOne(items);
-            res.send(result);
-        })
-        app.post('/addItems', async (req, res) => {
-            const newItem = req.body;
-            const tokenInfo = req.headers.authorization;
-            const [email, accessToken] = tokenInfo.split(" ")
-            const decoded = verifyToken(accessToken);
-            if (email === decoded.email) {
-                const result = await inventory.insertOne(newItem);
-                res.send(result);
-            }
-            else{
-                res.send({success: "Unauthorized Access"})
-            }
-
         });
 
         app.put('/inventory/:itemId', async (req, res) => {
@@ -70,6 +57,23 @@ async function run() {
             items = [];
             res.redirect("/inventory");
         });
+        
+        app.post('/addItems', async (req, res) => {
+            const newItem = req.body;
+            const tokenInfo = req.headers.authorization;
+            const [email, accessToken] = tokenInfo.split(" ")
+            const decoded = verifyToken(accessToken);
+            if (email === decoded.email) {
+                const result = await inventory.insertOne(newItem);
+                res.send(result);
+            }
+            else{
+                res.send({success: "Unauthorized Access"})
+            }
+
+        });
+
+        
         app.post('/login', (req, res) => {
             const email = req.body;
             const token = jwt.sign(email, process.env.ACCESS_TOKEN);
