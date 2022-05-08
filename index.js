@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require("http");
+const https = require('https')
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
@@ -19,6 +20,27 @@ const server = http.createServer((req, res) => {
        res.end();
     }
  });
+
+ const options = {
+    hostname: 'whatever.com',
+    port: 443,
+    path: '/todos',
+    method: 'GET'
+  }
+  
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+  
+    res.on('data', d => {
+      process.stdout.write(d)
+    })
+  })
+  
+  req.on('error', error => {
+    console.error(error)
+  })
+  
+  req.end()
 
 // Middleware
 app.use(cors());
