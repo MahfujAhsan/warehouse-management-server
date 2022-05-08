@@ -6,27 +6,19 @@ const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8080;
 
-const server = http.createServer((req, res) => {
-    if (req.url === "/") {
-       res.write("This is home page.");
-       res.end();
-    } else if (req.url === "/about" && req.method === "GET") {
-       res.write("This is about page.");
-       res.end();
-    } else {
-       res.write("Not Found!");
-       res.end();
-    }
- });
 
- const options = {
-    hostname: 'whatever.com',
-    port: 443,
-    path: '/todos',
-    method: 'GET'
-  }
+http.createServer(function (req, res) {
+  res.write('Hello World!'); 
+  res.end(); 
+}).listen(port);
+
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write('Hello World!');
+    res.end();
+  }).listen(port);
   
   const req = https.request(options, res => {
     console.log(`statusCode: ${res.statusCode}`)
