@@ -1,10 +1,24 @@
 const express = require('express');
+const http = require("http");
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
+
+const server = http.createServer((req, res) => {
+    if (req.url === "/") {
+       res.write("This is home page.");
+       res.end();
+    } else if (req.url === "/about" && req.method === "GET") {
+       res.write("This is about page.");
+       res.end();
+    } else {
+       res.write("Not Found!");
+       res.end();
+    }
+ });
 
 // Middleware
 app.use(cors());
@@ -105,6 +119,6 @@ function verifyToken(token) {
     return email;
 };
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('Molinard is Boom');
 });
