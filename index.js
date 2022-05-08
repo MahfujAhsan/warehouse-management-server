@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors());
@@ -64,7 +64,7 @@ async function run() {
             const [email, accessToken] = tokenInfo.split(" ")
             const decoded = verifyToken(accessToken);
             if (email === decoded.email) {
-                const result = await inventory.insertOne(newItem);
+                const result = await myItems.insertOne(newItem);
                 res.send(result);
             }
             else{
@@ -92,9 +92,6 @@ app.get("/", (req, res) => {
     res.send("HeY Molinard Please Res");
 });
 
-app.listen(port, () => {
-    console.log('Molinard is Boom');
-});
 
 function verifyToken(token) {
     let email;
@@ -108,3 +105,7 @@ function verifyToken(token) {
     });
     return email;
 };
+
+app.listen(port, () => {
+    console.log('Molinard is Boom');
+});
