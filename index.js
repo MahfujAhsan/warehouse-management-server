@@ -20,6 +20,10 @@ async function run() {
         const inventory = client.db('molinardInventory').collection('inventoryIteams');
         const myItems = client.db('molinardInventory').collection('myItems')
 
+        app.get("/", async (req, res) => {
+            await res.send("HeY Molinard Please Res");
+        });
+
         app.post('/inventory', async(req, res) => {
             const items = req.body;
             const result = await inventory.insertOne(items);
@@ -53,9 +57,9 @@ async function run() {
             res.send(result);
         });
 
-        app.delete("/inventory", (req, res) => {
+        app.delete("/inventory", async (req, res) => {
             items = [];
-            res.redirect("/inventory");
+            await res.redirect("/inventory");
         });
         
         app.post('/addItems', async (req, res) => {
@@ -74,9 +78,9 @@ async function run() {
         });
 
         
-        app.post('/login', (req, res) => {
+        app.post('/login', async (req, res) => {
             const email = req.body;
-            const token = jwt.sign(email, process.env.ACCESS_TOKEN);
+            const token = await jwt.sign(email, process.env.ACCESS_TOKEN);
             res.send({ token });
         });
 
@@ -87,10 +91,6 @@ async function run() {
 }
 
 run().catch(console.dir);
-
-app.get("/", (req, res) => {
-    res.send("HeY Molinard Please Res");
-});
 
 
 function verifyToken(token) {
