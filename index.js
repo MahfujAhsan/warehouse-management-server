@@ -30,7 +30,6 @@ async function run() {
             const tokenInfo = req.headers.authorization;
             const [email, accessToken] = tokenInfo.split(" ")
             const decoded = verifyToken(accessToken);
-            console.log(decoded)
             if (email === decoded.email) {
                 const result = await inventory.insertOne(newItem);
                 res.send(result);
@@ -98,4 +97,4 @@ function verifyToken(token) {
         }
     });
     return email;
-}
+};
