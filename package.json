@@ -1,8 +1,8 @@
 {
   "name": "molinard-perfumer-server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
-    "npm": "6.x"
+    "node": "16.x"
   },
   "description": "",
   "main": "index.js",
