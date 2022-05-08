@@ -25,6 +25,11 @@ async function run() {
             const item = await inventory.findOne(query);
             res.send(item);
         });
+        app.post('/inventory', async(req, res) => {
+            const items = req.body;
+            const result = await inventory.insertOne(items);
+            res.send(result);
+        })
         app.post('/inventory', async (req, res) => {
             const newItem = req.body;
             const tokenInfo = req.headers.authorization;
