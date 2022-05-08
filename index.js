@@ -70,5 +70,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('Molinard is Booming');
+    console.log('Molinard is Boom');
 });
