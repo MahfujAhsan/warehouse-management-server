@@ -77,7 +77,6 @@ async function run() {
 
         });
 
-        
         app.post('/login', async (req, res) => {
             const email = req.body;
             const token = await jwt.sign(email, process.env.ACCESS_TOKEN);
