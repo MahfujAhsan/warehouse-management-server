@@ -18,6 +18,7 @@ async function run() {
     try {
         await client.connect();
         const inventory = client.db('molinardInventory').collection('inventoryIteams');
+        const myItems = client.db('molinardInventory').collection('myItems')
 
         app.get('/inventory/:itemId', async (req, res) => {
             const id = req.params.itemId;
@@ -30,7 +31,7 @@ async function run() {
             const result = await inventory.insertOne(items);
             res.send(result);
         })
-        app.post('/inventory', async (req, res) => {
+        app.post('/addItems', async (req, res) => {
             const newItem = req.body;
             const tokenInfo = req.headers.authorization;
             const [email, accessToken] = tokenInfo.split(" ")
@@ -92,7 +93,7 @@ app.listen(port, () => {
 });
 
 function verifyToken(token) {
-    let email
+    let email;
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
         if(err) {
             email = 'Invalid Email'
