@@ -1,61 +1,43 @@
 const express = require('express');
-const http = require("http");
-const https = require('https')
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const port = process.env.PORT || 8080;
-
-
-http.createServer(function (req, res) {
-  res.write('Hello Worl!'); 
-  res.end(); 
-}).listen(port);
-
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('Hello World!');
-    res.end();
-  }).listen(port);
-  
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-  
-    res.on('data', d => {
-      process.stdout.write(d)
-    })
-  })
-  
-  req.on('error', error => {
-    console.error(error)
-  })
-  
-  req.end()
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@molinardcluster.ixezn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.46ry8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+console.log(uri)
 
 
 async function run() {
     try {
         await client.connect();
-        const inventory = client.db('molinardInventory').collection('inventoryIteams');
-        const myItems = client.db('molinardInventory').collection('myItems')
+        const inventory = client.db('molinardInventory').collection('inventoryItems');
 
         app.get("/", async (req, res) => {
             await res.send("HeY Molinard Please Res");
         });
 
-        app.post('/inventory', async(req, res) => {
-            const items = req.body;
-            const result = await inventory.insertOne(items);
-            res.send(result);
+
+        app.get('/myItems', async(req, res) => {
+            const email = req.query.email;
+            const query = {name: email};
+            const cursor = inventory.find(query);
+            const users = await cursor.toArray();
+            res.send(users) 
+        });
+
+        app.get('/inventory', async(req, res) => {
+            const query = {};
+            const cursor = inventory.find(query);
+            const users = await cursor.toArray();
+            res.send(users) 
         });
 
         app.get('/inventory/:itemId', async (req, res) => {
@@ -96,7 +78,7 @@ async function run() {
             const [email, accessToken] = tokenInfo.split(" ")
             const decoded = verifyToken(accessToken);
             if (email === decoded.email) {
-                const result = await myItems.insertOne(newItem);
+                const result = await inventory.insertOne(newItem);
                 res.send(result);
             }
             else{
@@ -133,6 +115,6 @@ function verifyToken(token) {
     return email;
 };
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log('Molinard is Boom');
 });
